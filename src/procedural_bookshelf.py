@@ -11,7 +11,7 @@ class Bookshelf():
     shelf_width = 1
     shelf_depth = 0.3
     books_offset = 0  # a slider will be added to adjust
-    shelf_levels = 6
+    shelf_levels = 14
     books_height = (shelf_height / shelf_levels) - shelf_dividers_height  # a slider will be added to adjust
     books_depth = shelf_depth - (shelf_depth / 5)  # a slider will be added to adjust
 
@@ -30,7 +30,7 @@ class Bookshelf():
                                      (self.shelf_dividers_height/2)) -
                                     (((self.shelf_height +
                                        self.shelf_dividers_height) /
-                                     6) * level),
+                                     self.shelf_levels) * level),
                                     0])
             self._freeze_transforms(divider)
             dividers.append(divider)
