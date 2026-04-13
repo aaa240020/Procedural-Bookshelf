@@ -16,7 +16,7 @@ class Bookshelf():
 
     books_offset = 0  # a slider will be added to adjust
     books_height = (shelf_height / shelf_levels) - shelf_dividers_height  # a slider will be added to adjust
-    books_depth = shelf_depth - (shelf_depth / 5)  # a slider will be added to adjust
+    books_depth = shelf_depth - (shelf_depth / 10)  # a slider will be added to adjust
 
     shelf_leg_height = overall_height / 20
 
@@ -95,20 +95,23 @@ class Bookshelf():
         book_x_axis = -(self.shelf_dividers_width/2) + self.books_offset
         """# don't forget to make the floats procedural"""
         #for book_stack in range(self.shelf_levels):
-        for books_amount in range(100):
+        while book_x_axis < (self.shelf_dividers_width/2):
             #pile_of_book = []
             random_width = random.uniform(0.01, 0.04)
             random_height = random.uniform(0.17, self.books_height)
             random_depth = random.uniform(0.125, self.books_depth)
 
+            if book_x_axis + random_width > (self.shelf_dividers_width/2):
+                break
+
             book = cmds.polyCube(height=random_height,
                                  width=random_width,
-                                 depth=random_depth)
+                                 depth=random_depth,)
             cmds.xform(book, pivots=[-random_width/2,
                                      -random_height/2,
-                                     -random_depth/2])
+                                     0])
             cmds.xform(book,
-                       translation=[book_x_axis,
+                       translation=[book_x_axis + random_width,
                                     random_height/2,
                                     0,])
             book_x_axis += random_width
