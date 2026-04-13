@@ -18,7 +18,7 @@ class Bookshelf():
     shelf_leg_height = overall_height / 20
 
     def generate_frame(self):
-        # make 0 in the for loop make the first object to negative and 1 go positive
+        frame = []
         for duplicates in range(-1, 2, 2):
             vertical_plank = cmds.polyCube(height=self.shelf_height,
                                            width=self.shelf_dividers_height,
@@ -49,8 +49,12 @@ class Bookshelf():
                                 0,
                                 -(self.shelf_depth/2) -
                                 (self.shelf_dividers_height/2)])
+        
+        frame.append(self.generate_dividers())
+        frame.append(self.generate_legs())
+        grp_name = cmds.group(frame, name="Bookshelf_Frame")
+        return grp_name
 
     def generate_bookshelf(self):
         self.generate_frame(self)
-        self.generate_dividers()
-        self.generate_legs()
+        self.generate_books()
