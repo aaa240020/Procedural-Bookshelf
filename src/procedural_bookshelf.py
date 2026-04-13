@@ -92,14 +92,18 @@ class Bookshelf():
 
     def generate_books(self):
         books = []
+
         book_x_axis = -(self.shelf_dividers_width/2) + self.books_offset
-        """# don't forget to make the floats procedural"""
+        
         #for book_stack in range(self.shelf_levels):
         while book_x_axis < (self.shelf_dividers_width/2):
             #pile_of_book = []
-            random_width = random.uniform(0.01, 0.04)
-            random_height = random.uniform(0.17, self.books_height)
-            random_depth = random.uniform(0.125, self.books_depth)
+            random_width = random.uniform(self.overall_height/100,
+                                          self.overall_height/40)
+            random_height = random.uniform(self.books_height/1.83529,
+                                           self.books_height)
+            random_depth = random.uniform(self.books_depth/2.16,
+                                          self.books_depth)
 
             if book_x_axis + random_width > (self.shelf_dividers_width/2):
                 break
@@ -113,7 +117,8 @@ class Bookshelf():
             cmds.xform(book,
                        translation=[book_x_axis + random_width,
                                     random_height/2,
-                                    0,])
+                                    (-self.books_depth/2) +
+                                    (random_depth/2),])
             book_x_axis += random_width
             self._freeze_transforms(book)
             """pile_of_book.append(book)
