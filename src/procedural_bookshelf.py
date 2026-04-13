@@ -16,3 +16,41 @@ class Bookshelf():
     books_depth = shelf_depth - (shelf_depth / 5)  # a slider will be added to adjust
 
     shelf_leg_height = overall_height / 20
+
+    def generate_frame(self):
+        # make 0 in the for loop make the first object to negative and 1 go positive
+        for duplicates in range(-1, 2, 2):
+            vertical_plank = cmds.polyCube(height=self.shelf_height,
+                                           width=self.shelf_dividers_height,
+                                           depth=self.shelf_depth,
+                                           name="vertical_plank_1")[0]
+            cmds.xform(vertical_plank,
+                       translation=[((self.shelf_width/2) -
+                                    self.shelf_dividers_height/2) *
+                                    duplicates,
+                                    0, 0])
+            horizontal_plank = cmds.polyCube(height=self.shelf_dividers_height,
+                                             width=self.shelf_width,
+                                             depth=self.shelf_depth,
+                                             name="horizontal_plank_1")[0]
+            cmds.xform(horizontal_plank,
+                       translation=[0,
+                                    ((self.shelf_height/2) +
+                                     self.shelf_dividers_height/2) *
+                                    duplicates,
+                                    0])
+        
+        back_plank = cmds.polyCube(height=self.overall_height,
+                                   width=self.shelf_width,
+                                   depth=self.shelf_dividers_height,
+                                   name="back_plank")[0]
+        cmds.xform(back_plank,
+                   translation=[0,
+                                0,
+                                -(self.shelf_depth/2) -
+                                (self.shelf_dividers_height/2)])
+
+    def generate_bookshelf(self):
+        self.generate_frame(self)
+        self.generate_dividers()
+        self.generate_legs()
