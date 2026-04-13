@@ -1,4 +1,5 @@
 import maya.cmds as cmds
+import random
 
 
 class Bookshelf():
@@ -12,7 +13,7 @@ class Bookshelf():
 
     shelf_dividers_height = overall_height / 125  # the width and depth of the dividers are the same as the entire shelf
     shelf_dividers_width = shelf_width - (shelf_dividers_height * 2)
-    
+
     books_offset = 0  # a slider will be added to adjust
     books_height = (shelf_height / shelf_levels) - shelf_dividers_height  # a slider will be added to adjust
     books_depth = shelf_depth - (shelf_depth / 5)  # a slider will be added to adjust
@@ -89,11 +90,39 @@ class Bookshelf():
         grp_name = cmds.group(frame, name="Bookshelf_Frame")
         return grp_name
 
-    #def generate_books(self):
-
+    def generate_books(self):
+        books = []
+        """# don't forget to make the floats procedural"""
+        random_width = random.uniform(0.01, 0.02)
+        random_height = random.uniform(0.178, self.books_height)
+        #for book_stack in range(self.shelf_levels):
+        for books_amount in range(100):
+            #pile_of_book = []
+            book = cmds.polyCube(height=random_height,
+                                 width=random_width,
+                                 depth=random.uniform(0.127,
+                                                      self.books_depth))
+            cmds.xform(book,
+                       translation=[(-(self.shelf_dividers_width/2)) +
+                                    (books_amount * random_width) +
+                                    self.books_offset,
+                                    0,
+                                    0,])
+            cmds.xform(book, pivots=[0,
+                                     -(random_height/2),
+                                     0])
+            cmds.xform(book,
+                       translation=[0,
+                                    random_height/2,
+                                    0])
+            self._freeze_transforms(book)
+            """pile_of_book.append(book)
+            combined_stack = cmds.polyUnite(pile_of_book, ch=True)
+            cmds.delete(combined_stack)"""
+            # join the books together
 
     def generate_bookshelf(self):
-        self.generate_frame(self)
+        self.generate_frame()
         self.generate_books()
 
     def _freeze_transforms(self, name):
