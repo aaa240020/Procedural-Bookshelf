@@ -19,14 +19,19 @@ class Bookshelf():
 
     def generate_dividers(self):
         dividers = []
-        for levels in range(self.shelf_levels):
+        for level in range(1, self.shelf_levels + 1):
             divider = cmds.polyCube(height=self.shelf_dividers_height,
                                     width=self.shelf_width,
                                     depth=self.shelf_depth,
                                     name="divider_plank_1")[0]
+            cmds.xform(divider,
+                       translation=[0,
+                                    (self.shelf_height/2) -
+                                    ((self.shelf_height/6) * level),
+                                    0])
             self._freeze_transforms(divider)
             dividers.append(divider)
-        
+
         grp_name = cmds.group(dividers, name="Dividers")
         return grp_name
 
@@ -61,7 +66,7 @@ class Bookshelf():
                                     0])
             self._freeze_transforms(horizontal_plank)
             frame.append(horizontal_plank)
-        
+
         back_plank = cmds.polyCube(height=self.overall_height,
                                    width=self.shelf_width,
                                    depth=self.shelf_dividers_height,
@@ -78,7 +83,7 @@ class Bookshelf():
         #frame.append(self.generate_legs())
         grp_name = cmds.group(frame, name="Bookshelf_Frame")
         return grp_name
-    
+
     #def generate_books(self):
 
 
