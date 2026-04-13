@@ -92,29 +92,26 @@ class Bookshelf():
 
     def generate_books(self):
         books = []
+        book_x_axis = -(self.shelf_dividers_width/2) + self.books_offset
         """# don't forget to make the floats procedural"""
-        random_width = random.uniform(0.01, 0.02)
-        random_height = random.uniform(0.178, self.books_height)
         #for book_stack in range(self.shelf_levels):
         for books_amount in range(100):
             #pile_of_book = []
+            random_width = random.uniform(0.01, 0.04)
+            random_height = random.uniform(0.17, self.books_height)
+            random_depth = random.uniform(0.125, self.books_depth)
+
             book = cmds.polyCube(height=random_height,
                                  width=random_width,
-                                 depth=random.uniform(0.127,
-                                                      self.books_depth))
+                                 depth=random_depth)
+            cmds.xform(book, pivots=[-random_width/2,
+                                     -random_height/2,
+                                     -random_depth/2])
             cmds.xform(book,
-                       translation=[(-(self.shelf_dividers_width/2)) +
-                                    (books_amount * random_width) +
-                                    self.books_offset,
-                                    0,
-                                    0,])
-            cmds.xform(book, pivots=[0,
-                                     -(random_height/2),
-                                     0])
-            cmds.xform(book,
-                       translation=[0,
+                       translation=[book_x_axis,
                                     random_height/2,
-                                    0])
+                                    0,])
+            book_x_axis += random_width
             self._freeze_transforms(book)
             """pile_of_book.append(book)
             combined_stack = cmds.polyUnite(pile_of_book, ch=True)
