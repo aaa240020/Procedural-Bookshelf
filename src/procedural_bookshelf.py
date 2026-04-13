@@ -19,15 +19,18 @@ class Bookshelf():
 
     def generate_dividers(self):
         dividers = []
-        for level in range(1, self.shelf_levels + 1):
+        for level in range(1, self.shelf_levels):
             divider = cmds.polyCube(height=self.shelf_dividers_height,
                                     width=self.shelf_width,
                                     depth=self.shelf_depth,
                                     name="divider_plank_1")[0]
             cmds.xform(divider,
                        translation=[0,
-                                    (self.shelf_height/2) -
-                                    ((self.shelf_height/6) * level),
+                                    ((self.shelf_height/2) +
+                                     (self.shelf_dividers_height/2)) -
+                                    (((self.shelf_height +
+                                       self.shelf_dividers_height) /
+                                     6) * level),
                                     0])
             self._freeze_transforms(divider)
             dividers.append(divider)
