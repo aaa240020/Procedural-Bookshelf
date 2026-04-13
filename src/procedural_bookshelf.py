@@ -18,13 +18,13 @@ class Bookshelf():
     shelf_leg_height = overall_height / 20
 
     def generate_dividers(self):
-        # make it a group called bookshelf dividers
         dividers = []
         for levels in range(self.shelf_levels):
             divider = cmds.polyCube(height=self.shelf_dividers_height,
                                     width=self.shelf_width,
                                     depth=self.shelf_depth,
                                     name="divider_plank_1")[0]
+            self._freeze_transforms(divider)
             dividers.append(divider)
         
         grp_name = cmds.group(dividers, name="Dividers")
@@ -47,6 +47,8 @@ class Bookshelf():
                                     self.shelf_dividers_height/2) *
                                     duplicates,
                                     0, 0])
+            self._freeze_transforms(vertical_plank)
+            frame.append(vertical_plank)
             horizontal_plank = cmds.polyCube(height=self.shelf_dividers_height,
                                              width=self.shelf_width,
                                              depth=self.shelf_depth,
@@ -57,7 +59,7 @@ class Bookshelf():
                                      self.shelf_dividers_height/2) *
                                     duplicates,
                                     0])
-            frame.append(vertical_plank)
+            self._freeze_transforms(horizontal_plank)
             frame.append(horizontal_plank)
         
         back_plank = cmds.polyCube(height=self.overall_height,
@@ -69,6 +71,7 @@ class Bookshelf():
                                 0,
                                 -(self.shelf_depth/2) -
                                 (self.shelf_dividers_height/2)])
+        self._freeze_transforms(back_plank)
         frame.append(back_plank)
 
         frame.append(self.generate_dividers())
@@ -82,3 +85,7 @@ class Bookshelf():
     def generate_bookshelf(self):
         self.generate_frame(self)
         self.generate_books()
+
+    def _freeze_transforms(self, name):
+        cmds.makeIdentity(name, apply=True, translate=True, rotate=True,
+                          scale=True, normal=False, preserveNormals=True)
