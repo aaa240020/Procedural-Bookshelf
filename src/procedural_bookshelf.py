@@ -5,13 +5,15 @@ class Bookshelf():
 
     overall_height = 2  # overall height is the height of the shelf without the legs
 
-    shelf_dividers_height = overall_height / 125  # the width and depth of the dividers are the same as the entire shelf
-
     shelf_height = overall_height - (overall_height / 62.5)
     shelf_width = 1
     shelf_depth = 0.3
+    shelf_levels = 6
+
+    shelf_dividers_height = overall_height / 125  # the width and depth of the dividers are the same as the entire shelf
+    shelf_dividers_width = shelf_width - (shelf_dividers_height * 2)
+    
     books_offset = 0  # a slider will be added to adjust
-    shelf_levels = 14
     books_height = (shelf_height / shelf_levels) - shelf_dividers_height  # a slider will be added to adjust
     books_depth = shelf_depth - (shelf_depth / 5)  # a slider will be added to adjust
 
@@ -21,7 +23,7 @@ class Bookshelf():
         dividers = []
         for level in range(1, self.shelf_levels):
             divider = cmds.polyCube(height=self.shelf_dividers_height,
-                                    width=self.shelf_width,
+                                    width=self.shelf_dividers_width,
                                     depth=self.shelf_depth,
                                     name="divider_plank_1")[0]
             cmds.xform(divider,
