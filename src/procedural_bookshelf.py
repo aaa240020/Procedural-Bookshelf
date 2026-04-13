@@ -18,7 +18,7 @@ class Bookshelf():
     books_height = (shelf_height / shelf_levels) - shelf_dividers_height  # a slider will be added to adjust
     books_depth = shelf_depth - (shelf_depth / 10)  # a slider will be added to adjust
 
-    shelf_leg_height = overall_height / 20
+    shelf_leg_height = overall_height * (1/25)
 
     def generate_dividers(self):
         dividers = []
@@ -41,8 +41,23 @@ class Bookshelf():
         grp_name = cmds.group(dividers, name="Dividers")
         return grp_name
 
-    #def generate_legs(self):
-        # make it a group called bookshelf legs
+    def generate_legs(self):
+        legs = []
+        for duplicates in [-1, -1, 1, 1]:
+            leg = cmds.polyCylinder(height=self.shelf_leg_height,
+                                    radius=self.shelf_leg_height/2,
+                                    name="shelf_leg_1")
+            cmds.xform(leg,
+                       translation=[(((self.shelf_width/2) -
+                                      (self.shelf_dividers_height * 4)) *
+                                     (duplicates)),
+                                    0,
+                                    0,])
+            self._freeze_transforms(leg)
+            """legs.append(leg)
+
+        grp_name = cmds.group(legs, name="Shelf_Legs")
+        return grp_name"""
 
     def generate_frame(self):
         frame = []
@@ -84,7 +99,7 @@ class Bookshelf():
         frame.append(back_plank)
 
         frame.append(self.generate_dividers())
-        #frame.append(self.generate_legs())
+        frame.append(self.generate_legs())
         grp_name = cmds.group(frame, name="Bookshelf_Frame")
         return grp_name
 
@@ -118,6 +133,7 @@ class Bookshelf():
                                     (random_depth/2),])
             book_x_axis += random_width
             self._freeze_transforms(book)
+            #  self._join_geometry(book)
             pile_of_books.append(book)
 
         grp_name = cmds.group(pile_of_books, name="Book_Stack_1")
@@ -143,8 +159,13 @@ class Bookshelf():
         return grp_name
 
     def generate_bookshelf(self):
-        self.generate_frame()
-        self.generate_stacks_of_books()
+        book_shelf = []
+
+        book_shelf.append(self.generate_frame())
+        book_shelf.append(self.generate_stacks_of_books())
+
+        grp_name = cmds.group(book_shelf, name="Bookshelf")
+        return grp_name
 
     def _freeze_transforms(self, name):
         cmds.makeIdentity(name, apply=True, translate=True, rotate=True,
