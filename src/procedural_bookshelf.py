@@ -84,9 +84,10 @@ class BookshelfWindow(QtWidgets.QDialog):
         # Book Offset
         self.books_offset_lbl = QtWidgets.QLabel("Book Offset")
         self.books_offset_dspnx = QtWidgets.QDoubleSpinBox()
+        self.books_offset_dspnx.setDecimals(4)
         self.books_offset_dspnx.setMinimumWidth(50)
         self.books_offset_dspnx.setValue(0)
-        self.books_offset_dspnx.setSingleStep(0.005)
+        self.books_offset_dspnx.setSingleStep(0.0005)
         self.book_options_layout.addWidget(self.books_offset_lbl)
         self.book_options_layout.addWidget(self.books_offset_dspnx)
         self.main_layout.addLayout(self.book_options_layout)
