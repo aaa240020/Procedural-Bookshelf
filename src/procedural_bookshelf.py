@@ -68,33 +68,26 @@ class BookshelfWindow(QtWidgets.QDialog):
 class Bookshelf():
 
     overall_height = 2  # the height of the shelf without the legs
-
-    #shelf_height = overall_height - (overall_height / 62.5)
     shelf_width = 1  # an option
     shelf_depth = 0.3  # an option
     shelf_levels = 6  # an option
-    
-    #shelf_dividers_height = overall_height / 125
-    #shelf_dividers_width = shelf_width - ((overall_height / 125) * 2)
-    
     books_offset = 0  # a slider will be added to adjust
-    #books_height = ((overall_height - (overall_height / 62.5)) / shelf_levels) - (overall_height / 125)  # a slider will be added to adjust
-    #books_depth = shelf_depth - (shelf_depth / 10)  # a slider will be added to adjust
-
-    #shelf_leg_height = overall_height * (1/25)
 
     def generate_dividers(self):
         dividers = []
         for level in range(1, self.shelf_levels):
             divider = cmds.polyCube(height=(self.overall_height / 125),
-                                    width=(self.shelf_width - ((self.overall_height / 125) * 2)),
+                                    width=(self.shelf_width -
+                                           ((self.overall_height / 125) * 2)),
                                     depth=self.shelf_depth,
                                     name="divider_plank_1")[0]
             cmds.xform(divider,
                        translation=[0,
-                                    (((self.overall_height - (self.overall_height / 62.5))/2) +
+                                    (((self.overall_height -
+                                       (self.overall_height / 62.5))/2) +
                                      ((self.overall_height / 125)/2)) -
-                                    ((((self.overall_height - (self.overall_height / 62.5)) +
+                                    ((((self.overall_height -
+                                        (self.overall_height / 62.5)) +
                                        (self.overall_height / 125)) /
                                      self.shelf_levels) * level),
                                     0])
@@ -109,7 +102,8 @@ class Bookshelf():
         for x_axis_duplicates in [-1, 1]:
             for z_axis_dupllicates in [-1, 1]:
                 leg = cmds.polyCylinder(height=(self.overall_height * (1/25)),
-                                        radius=(self.overall_height * (1/25))/2.5,
+                                        radius=(self.overall_height *
+                                                (1/25))/2.5,
                                         name="shelf_leg_1")[0]
                 cmds.xform(leg,
                            translation=[(((self.shelf_width/2) -
@@ -129,7 +123,9 @@ class Bookshelf():
     def generate_frame(self):
         frame = []
         for duplicates in range(-1, 2, 2):
-            vertical_plank = cmds.polyCube(height=(self.overall_height - (self.overall_height / 62.5)),
+            vertical_plank = cmds.polyCube(height=(self.overall_height -
+                                                   (self.overall_height /
+                                                    62.5)),
                                            width=(self.overall_height / 125),
                                            depth=self.shelf_depth,
                                            name="vertical_plank_1")[0]
@@ -140,13 +136,15 @@ class Bookshelf():
                                     0, 0])
             self._freeze_transforms(vertical_plank)
             frame.append(vertical_plank)
-            horizontal_plank = cmds.polyCube(height=(self.overall_height / 125),
+            horizontal_plank = cmds.polyCube(height=(self.overall_height /
+                                                     125),
                                              width=self.shelf_width,
                                              depth=self.shelf_depth,
                                              name="horizontal_plank_1")[0]
             cmds.xform(horizontal_plank,
                        translation=[0,
-                                    (((self.overall_height - (self.overall_height / 62.5))/2) +
+                                    (((self.overall_height -
+                                       (self.overall_height / 62.5))/2) +
                                      (self.overall_height / 125)/2) *
                                     duplicates,
                                     0])
@@ -173,17 +171,30 @@ class Bookshelf():
     def generate_books(self):
         pile_of_books = []
 
-        book_x_axis = -((self.shelf_width - ((self.overall_height / 125) * 2))/2) + self.books_offset
+        book_x_axis = -((self.shelf_width - ((self.overall_height / 125) *
+                                             2))/2) + self.books_offset
 
-        while book_x_axis < ((self.shelf_width - ((self.overall_height / 125) * 2))/2):
+        while book_x_axis < ((self.shelf_width - ((self.overall_height / 125) *
+                                                  2))/2):
             random_width = random.uniform(self.overall_height/100,
                                           self.overall_height/40)
-            random_height = random.uniform((((self.overall_height - (self.overall_height / 62.5)) / self.shelf_levels) - (self.overall_height / 125))/1.83529,
-                                           (((self.overall_height - (self.overall_height / 62.5)) / self.shelf_levels) - (self.overall_height / 125)))
-            random_depth = random.uniform((self.shelf_depth - (self.shelf_depth / 10))/2.16,
-                                          (self.shelf_depth - (self.shelf_depth / 10)))
+            random_height = random.uniform((((self.overall_height -
+                                              (self.overall_height / 62.5)) /
+                                             self.shelf_levels) -
+                                            (self.overall_height /
+                                             125))/1.83529,
+                                           (((self.overall_height -
+                                              (self.overall_height / 62.5)) /
+                                             self.shelf_levels) -
+                                               (self.overall_height / 125)))
+            random_depth = random.uniform((self.shelf_depth -
+                                           (self.shelf_depth / 10))/2.16,
+                                          (self.shelf_depth -
+                                           (self.shelf_depth / 10)))
 
-            if book_x_axis + random_width > ((self.shelf_width - ((self.overall_height / 125) * 2))/2):
+            if book_x_axis + random_width > ((self.shelf_width -
+                                              ((self.overall_height /
+                                                125) * 2))/2):
                 break
 
             book = cmds.polyCube(height=random_height,
@@ -196,7 +207,8 @@ class Bookshelf():
             cmds.xform(book,
                        translation=[book_x_axis + random_width,
                                     random_height/2,
-                                    (-(self.shelf_depth - (self.shelf_depth / 10))/2) +
+                                    (-(self.shelf_depth -
+                                       (self.shelf_depth / 10))/2) +
                                     (random_depth/2),])
             book_x_axis += random_width
             self._freeze_transforms(book)
@@ -213,9 +225,11 @@ class Bookshelf():
             sub_grp_name = self.generate_books()
             cmds.xform(sub_grp_name,
                        translation=[0,
-                                    (((self.overall_height - (self.overall_height / 62.5))/2) +
+                                    (((self.overall_height -
+                                       (self.overall_height / 62.5))/2) +
                                      ((self.overall_height / 125)/2)) -
-                                    ((((self.overall_height - (self.overall_height / 62.5)) +
+                                    ((((self.overall_height -
+                                        (self.overall_height / 62.5)) +
                                        (self.overall_height / 125)) /
                                      self.shelf_levels) * book_stack),
                                     0])
