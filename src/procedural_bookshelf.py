@@ -46,21 +46,22 @@ class Bookshelf():
         for x_axis_duplicates in [-1, 1]:
             for z_axis_dupllicates in [-1, 1]:
                 leg = cmds.polyCylinder(height=self.shelf_leg_height,
-                                        radius=self.shelf_leg_height/2,
-                                        name="shelf_leg_1")
+                                        radius=self.shelf_leg_height/2.5,
+                                        name="shelf_leg_1")[0]
                 cmds.xform(leg,
                            translation=[(((self.shelf_width/2) -
                                         (self.shelf_dividers_height * 4)) *
                                         x_axis_duplicates),
-                                        0,
+                                        (-self.overall_height/2) -
+                                        self.shelf_leg_height/2,
                                         (((self.shelf_depth/2) -
                                          (self.shelf_dividers_height * 4)) *
                                         z_axis_dupllicates),])
                 self._freeze_transforms(leg)
-                """legs.append(leg)
+                legs.append(leg)
 
         grp_name = cmds.group(legs, name="Shelf_Legs")
-        return grp_name"""
+        return grp_name
 
     def generate_frame(self):
         frame = []
