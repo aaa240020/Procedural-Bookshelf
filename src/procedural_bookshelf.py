@@ -25,9 +25,13 @@ class BookshelfWindow(QtWidgets.QDialog):
         self.build_btn.clicked.connect(self.build_bookshelf)
 
     def build_bookshelf(self):
+        # Frame Options
         self.bookShelf.overall_height = self.shelf_height_dspnx.value()
         self.bookShelf.shelf_width = self.shelf_width_dspnx.value()
+        self.bookShelf.shelf_depth = self.shelf_depth_dspnx.value()
+        # Book Options
         self.bookShelf.shelf_levels = self.shelf_levels_spnx.value()
+        self.bookShelf.books_offset = self.books_offset_dspnx.value()
         self.bookShelf.generate_bookshelf()
 
     def _mk_main_layout(self):
@@ -57,8 +61,18 @@ class BookshelfWindow(QtWidgets.QDialog):
         self.frame_options_layout.addWidget(self.shelf_width_lbl)
         self.frame_options_layout.addWidget(self.shelf_width_dspnx)
         self.main_layout.addLayout(self.frame_options_layout)
+        # Shelf Depth
+        self.shelf_depth_lbl = QtWidgets.QLabel("Shelf Depth")
+        self.shelf_depth_dspnx = QtWidgets.QDoubleSpinBox()
+        self.shelf_depth_dspnx.setMinimumWidth(50)
+        self.shelf_depth_dspnx.setValue(0.3)
+        self.shelf_depth_dspnx.setSingleStep(0.05)
+        self.frame_options_layout.addWidget(self.shelf_depth_lbl)
+        self.frame_options_layout.addWidget(self.shelf_depth_dspnx)
+        self.main_layout.addLayout(self.frame_options_layout)
 
     def _mk_book_options_ui(self):
+        # Shelf Levels
         self.book_options_layout = QtWidgets.QHBoxLayout()
         self.book_levels_lbl = QtWidgets.QLabel("Shelf Levels")
         self.shelf_levels_spnx = QtWidgets.QSpinBox()
@@ -66,6 +80,15 @@ class BookshelfWindow(QtWidgets.QDialog):
         self.shelf_levels_spnx.setValue(6)
         self.book_options_layout.addWidget(self.book_levels_lbl)
         self.book_options_layout.addWidget(self.shelf_levels_spnx)
+        self.main_layout.addLayout(self.book_options_layout)
+        # Book Offset
+        self.books_offset_lbl = QtWidgets.QLabel("Book Offset")
+        self.books_offset_dspnx = QtWidgets.QDoubleSpinBox()
+        self.books_offset_dspnx.setMinimumWidth(50)
+        self.books_offset_dspnx.setValue(0)
+        self.books_offset_dspnx.setSingleStep(0.005)
+        self.book_options_layout.addWidget(self.books_offset_lbl)
+        self.book_options_layout.addWidget(self.books_offset_dspnx)
         self.main_layout.addLayout(self.book_options_layout)
 
     def _mk_buttons_layout(self):
@@ -183,7 +206,7 @@ class Bookshelf():
         pile_of_books = []
 
         book_x_axis = -((self.shelf_width - ((self.overall_height / 125) *
-                                             2))/2) + self.books_offset
+                                             2))/2)
 
         while book_x_axis < ((self.shelf_width - ((self.overall_height / 125) *
                                                   2))/2):
@@ -221,7 +244,7 @@ class Bookshelf():
                                     (-(self.shelf_depth -
                                        (self.shelf_depth / 10))/2) +
                                     (random_depth/2),])
-            book_x_axis += random_width
+            book_x_axis += random_width + self.books_offset
             self._freeze_transforms(book)
             #  self._join_geometry(book)
             pile_of_books.append(book)
