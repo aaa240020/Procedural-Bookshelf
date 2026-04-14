@@ -26,6 +26,7 @@ class BookshelfWindow(QtWidgets.QDialog):
 
     def build_bookshelf(self):
         self.bookShelf.overall_height = self.shelf_height_dspnx.value()
+        self.bookShelf.shelf_width = self.shelf_width_dspnx.value()
         self.bookShelf.shelf_levels = self.shelf_levels_spnx.value()
         self.bookShelf.generate_bookshelf()
 
@@ -37,14 +38,24 @@ class BookshelfWindow(QtWidgets.QDialog):
         self.setLayout(self.main_layout)
 
     def _mk_frame_options_ui(self):
+        # Shelf Height
         self.frame_options_layout = QtWidgets.QHBoxLayout()
         self.shelf_height_lbl = QtWidgets.QLabel("Shelf Height")
         self.shelf_height_dspnx = QtWidgets.QDoubleSpinBox()
         self.shelf_height_dspnx.setMinimumWidth(50)
-        self.shelf_height_dspnx.setValue(1.0)
+        self.shelf_height_dspnx.setValue(2.0)
         self.shelf_height_dspnx.setSingleStep(0.1)
         self.frame_options_layout.addWidget(self.shelf_height_lbl)
         self.frame_options_layout.addWidget(self.shelf_height_dspnx)
+        self.main_layout.addLayout(self.frame_options_layout)
+        # Shelf Width
+        self.shelf_width_lbl = QtWidgets.QLabel("Shelf Width")
+        self.shelf_width_dspnx = QtWidgets.QDoubleSpinBox()
+        self.shelf_width_dspnx.setMinimumWidth(50)
+        self.shelf_width_dspnx.setValue(1.0)
+        self.shelf_width_dspnx.setSingleStep(0.1)
+        self.frame_options_layout.addWidget(self.shelf_width_lbl)
+        self.frame_options_layout.addWidget(self.shelf_width_dspnx)
         self.main_layout.addLayout(self.frame_options_layout)
 
     def _mk_book_options_ui(self):
@@ -52,7 +63,7 @@ class BookshelfWindow(QtWidgets.QDialog):
         self.book_levels_lbl = QtWidgets.QLabel("Shelf Levels")
         self.shelf_levels_spnx = QtWidgets.QSpinBox()
         self.shelf_levels_spnx.setMinimumWidth(50)
-        self.shelf_levels_spnx.setValue(3)
+        self.shelf_levels_spnx.setValue(6)
         self.book_options_layout.addWidget(self.book_levels_lbl)
         self.book_options_layout.addWidget(self.shelf_levels_spnx)
         self.main_layout.addLayout(self.book_options_layout)
