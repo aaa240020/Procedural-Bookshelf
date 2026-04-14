@@ -1,17 +1,80 @@
 import maya.cmds as cmds
 import random
+import maya.OpenMayaUI as omui
+from PySide6 import QtWidgets, QtCore
+from shiboken6 import wrapInstance
+
+
+def get_maya_main_win():
+    main_win_addr = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_win_addr), QtWidgets.QWidget)
+
+
+class BookshelfWindow(QtWidgets.QDialog):
+
+    def __init__(self):
+        super().__init__(parent=get_maya_main_win())
+        self.bookShelf = Bookshelf()
+        self.setWindowTitle("Bookshelf Generator")
+        self.resize(300, 200)
+        self._mk_main_layout()
+        self._connect_signals()
+
+    def _connect_signals(self):
+        self.cancel_btn.clicked.connect(self.close)
+        self.build_btn.clicked.connect(self.build_bookshelf)
+
+    def build_bookshelf(self):
+        self.bookShelf.overall_height = self.shelf_height_dspnx.value()
+        self.bookShelf.shelf_levels = self.shelf_levels_spnx.value()
+        self.bookShelf.generate_bookshelf()
+
+    def _mk_main_layout(self):
+        self.main_layout = QtWidgets.QVBoxLayout()
+        self._mk_frame_options_ui()
+        self._mk_book_options_ui()
+        self._mk_buttons_layout()
+        self.setLayout(self.main_layout)
+
+    def _mk_frame_options_ui(self):
+        self.frame_options_layout = QtWidgets.QHBoxLayout()
+        self.shelf_height_lbl = QtWidgets.QLabel("Shelf Height")
+        self.shelf_height_dspnx = QtWidgets.QDoubleSpinBox()
+        self.shelf_height_dspnx.setMinimumWidth(50)
+        self.shelf_height_dspnx.setValue(1.0)
+        self.shelf_height_dspnx.setSingleStep(0.1)
+        self.frame_options_layout.addWidget(self.shelf_height_lbl)
+        self.frame_options_layout.addWidget(self.shelf_height_dspnx)
+        self.main_layout.addLayout(self.frame_options_layout)
+
+    def _mk_book_options_ui(self):
+        self.book_options_layout = QtWidgets.QHBoxLayout()
+        self.book_levels_lbl = QtWidgets.QLabel("Shelf Levels")
+        self.shelf_levels_spnx = QtWidgets.QSpinBox()
+        self.shelf_levels_spnx.setMinimumWidth(50)
+        self.shelf_levels_spnx.setValue(3)
+        self.book_options_layout.addWidget(self.book_levels_lbl)
+        self.book_options_layout.addWidget(self.shelf_levels_spnx)
+        self.main_layout.addLayout(self.book_options_layout)
+
+    def _mk_buttons_layout(self):
+        self.build_btn = QtWidgets.QPushButton("Build")
+        self.main_layout.addWidget(self.build_btn)
+
+        self.cancel_btn = QtWidgets.QPushButton("Cancel")
+        self.main_layout.addWidget(self.cancel_btn)
 
 
 class Bookshelf():
 
-    overall_height = 2  # overall height is the height of the shelf without the legs
+    overall_height = 2  # the height of the shelf without the legs
 
     shelf_height = overall_height - (overall_height / 62.5)
-    shelf_width = 1
-    shelf_depth = 0.3
-    shelf_levels = 6
+    shelf_width = 1  # an option
+    shelf_depth = 0.3  # an option
+    shelf_levels = 6  # an option
 
-    shelf_dividers_height = overall_height / 125  # the width and depth of the dividers are the same as the entire shelf
+    shelf_dividers_height = overall_height / 125
     shelf_dividers_width = shelf_width - (shelf_dividers_height * 2)
 
     books_offset = 0  # a slider will be added to adjust
@@ -169,6 +232,18 @@ class Bookshelf():
         book_shelf.append(self.generate_stacks_of_books())
 
         grp_name = cmds.group(book_shelf, name="Bookshelf")
+
+        cmds.xform(grp_name,
+                   translation=[0,
+                                (self.overall_height/2) +
+                                self.shelf_leg_height,
+                                0])
+        cmds.xform(grp_name,
+                   pivots=[0,
+                           (-self.overall_height/2) -
+                           self.shelf_leg_height,
+                           0])
+
         return grp_name
 
     def _freeze_transforms(self, name):
