@@ -43,18 +43,21 @@ class Bookshelf():
 
     def generate_legs(self):
         legs = []
-        for duplicates in [-1, -1, 1, 1]:
-            leg = cmds.polyCylinder(height=self.shelf_leg_height,
-                                    radius=self.shelf_leg_height/2,
-                                    name="shelf_leg_1")
-            cmds.xform(leg,
-                       translation=[(((self.shelf_width/2) -
-                                      (self.shelf_dividers_height * 4)) *
-                                     (duplicates)),
-                                    0,
-                                    0,])
-            self._freeze_transforms(leg)
-            """legs.append(leg)
+        for x_axis_duplicates in [-1, 1]:
+            for z_axis_dupllicates in [-1, 1]:
+                leg = cmds.polyCylinder(height=self.shelf_leg_height,
+                                        radius=self.shelf_leg_height/2,
+                                        name="shelf_leg_1")
+                cmds.xform(leg,
+                           translation=[(((self.shelf_width/2) -
+                                        (self.shelf_dividers_height * 4)) *
+                                        x_axis_duplicates),
+                                        0,
+                                        (((self.shelf_depth/2) -
+                                         (self.shelf_dividers_height * 4)) *
+                                        z_axis_dupllicates),])
+                self._freeze_transforms(leg)
+                """legs.append(leg)
 
         grp_name = cmds.group(legs, name="Shelf_Legs")
         return grp_name"""
